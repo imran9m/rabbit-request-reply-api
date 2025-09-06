@@ -6,13 +6,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ReplyListener {
+
     private final RpcClient rpcClient;
+
     public ReplyListener(RpcClient rpcClient) {
         this.rpcClient = rpcClient;
     }
 
-    @RabbitListener(queues = RabbitConfig.REPLY_QUEUE)
+    @RabbitListener(queues = "#{T(com.example.rabbit_request_reply_api.RabbitConfig).getReplyQueueName()}")
     public void receiveReply(Message message) {
         rpcClient.handleReply(message);
     }
 }
+
